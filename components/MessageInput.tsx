@@ -25,7 +25,7 @@ const MessageInput = ({ onSubmit }) => {
         );
         root.style.setProperty(
           '--vvh',
-          `${document.documentElement.clientHeight}px`
+          `${window.innerHeight}px`
         );
         checkIfMobile();
       }
