@@ -6,11 +6,12 @@ html,
 body,
 #__next,
 .main {
-  max-height: 100vh;
   height: var(--vvh);
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: rgb(31, 41, 55);
+  color: white;
 }
 
 .channel-list {

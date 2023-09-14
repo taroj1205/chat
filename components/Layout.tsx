@@ -4,7 +4,7 @@ import UserContext from '~/lib/UserContext'
 import { addChannel, deleteChannel, fetchUser } from '~/lib/Store'
 import TrashIcon from '~/components/TrashIcon'
 import { useRouter } from 'next/router'
-import { FaBars, FaTimes } from 'react-icons/fa'
+import { FaBars, FaPlus, FaTimes } from 'react-icons/fa'
 
 export default function Layout(props) {
   const { signOut, user, userRoles } = useContext(UserContext)
@@ -34,18 +34,18 @@ export default function Layout(props) {
   }
 
   const newChannel = async () => {
-    const slug = prompt('Please enter your name')
+    const slug = prompt('Please enter channel name')
     if (slug) {
       addChannel(slugify(slug), user.id)
     }
   }
 
   const toggleMenu = () => {
-    setSidebarStyle(sidebarStyle === 'hidden' ? 'w-64' : 'hidden')
+    setSidebarStyle(sidebarStyle === 'hidden' ? 'w-screen' : 'hidden')
   };
 
   return (
-    <main className="main flex h-screen w-screen overflow-hidden">
+    <main className="main flex w-screen overflow-hidden" style={{ height: "var(--vvh)" }}>
       {/* Sidebar */}
       <button
         className={`text-white text-2xl p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
@@ -54,8 +54,8 @@ export default function Layout(props) {
         <FaBars />
       </button>
       <nav
-        className={`${sidebarStyle} md:block bg-gray-900 text-gray-100 overflow-scroll`}
-        style={{ maxWidth: '20%', minWidth: 150, maxHeight: '100vh' }}
+        className={`${sidebarStyle} md:max-w-[30%] w-52 md:block bg-gray-900 text-gray-100 overflow-scroll`}
+        style={{ minWidth: 150, maxHeight: '100vh' }}
       >
         <button
           className={`text-white p-2 focus:outline-none text-2xl md:hidden ${sidebarStyle === 'hidden' ? 'hidden' : 'relative'} top-1 left-1 z-10`}
@@ -64,14 +64,6 @@ export default function Layout(props) {
           <FaTimes />
         </button>
         <div className="p-2 ">
-          <div className="p-2">
-            <button
-              className="bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 rounded w-full transition duration-150"
-              onClick={() => newChannel()}
-            >
-              New Channel
-            </button>
-          </div>
           <hr className="m-2" />
           <div className="p-2 flex flex-col space-y-2">
             <h6 className="text-xs">User: {username}</h6>
@@ -103,6 +95,16 @@ export default function Layout(props) {
                 userRoles={userRoles}
               />
             ))}
+            {userRoles.includes('admin') && (
+              <li>
+                <button
+                  className='flex items-center justify-center w-full py-2 px-4 text-gray-500 hover:text-white hover:bg-gray-700 transition duration-300 ease-in-out'
+                  onClick={newChannel}
+                >
+                  <FaPlus />
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </nav>

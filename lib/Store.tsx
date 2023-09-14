@@ -58,7 +58,7 @@ export const useStore = (props) => {
         'postgres_changes',
         { event: 'DELETE', schema: 'public', table: 'channels' },
         (payload) => handleDeletedChannel(payload.old)
-      )
+    )
       .on(
         'postgres_changes', // Add a new listener for updates
         { event: 'UPDATE', schema: 'public', table: 'messages' },
@@ -69,13 +69,24 @@ export const useStore = (props) => {
             handleDeletedMessage(updatedMessage); // Delete the message from the state
           }
         }
+    )
+      .on(
+        'postgres_changes', // Add a new listener for updates
+        { event: 'UPDATE', schema: 'public', table: 'channels' },
+        (payload) => {
+          const updatedChannel = payload.new;
+          // Check if deleted_at is not null
+          if (updatedChannel && updatedChannel.deleted_at !== null) {
+            handleDeletedChannel(updatedChannel); // Delete the message from the state
+          }
+        }
       )
       .subscribe()
     // Cleanup on unmount
     return () => {
-      supabase.removeChannel(supabase.channel(messageListener))
-      supabase.removeChannel(supabase.channel(userListener))
-      supabase.removeChannel(supabase.channel(channelListener))
+      supabase.removeChannel(messageListener)
+      supabase.removeChannel(userListener)
+      supabase.removeChannel(channelListener)
     }
   }, [])
 
@@ -144,7 +155,7 @@ export const useStore = (props) => {
  */
 export const fetchChannels = async (setState) => {
   try {
-    let { data } = await supabase.from('channels').select('*')
+    let { data } = await supabase.from('channels').select('*').is('deleted_at', null)
     if (setState) setState(data)
     return data
   } catch (error) {
@@ -159,7 +170,7 @@ export const fetchChannels = async (setState) => {
  */
 export const fetchUser = async (userId, setState) => {
   try {
-    let { data } = await supabase.from('users').select(`*`).eq('id', userId)
+    let { data } = await supabase.from('users').select(`*`).eq('id', userId).is('deleted_at', null)
     let user = data[0]
     if (setState) setState(user)
     return user
@@ -237,7 +248,9 @@ export const addMessage = async (message, channel_id, user_id) => {
  */
 export const deleteChannel = async (channel_id) => {
   try {
-    let { data } = await supabase.from('channels').delete().match({ id: channel_id })
+    let { data } = await supabase.from('channels')
+      .update({ deleted_at: new Date().toISOString() })
+      .match({ id: channel_id })
     return data
   } catch (error) {
     console.log('error', error)
@@ -250,6 +263,8 @@ export const deleteChannel = async (channel_id) => {
  */
 export const deleteMessage = async (message_id) => {
   try {
+    const confirmDelete = window.confirm('Are you sure you want to delete this message?')
+    if (!confirmDelete) return
     let { data } = await supabase
       .from('messages')
       .update({ deleted_at: new Date().toISOString() })

@@ -3,7 +3,7 @@ import {FaPaperPlane} from 'react-icons/fa'
 
 const MessageInput = ({ onSubmit }) => {
   const [messageText, setMessageText] = useState('')
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLTextAreaElement>()
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -57,6 +57,7 @@ const MessageInput = ({ onSubmit }) => {
     } else {
       onSubmit(messageText)
       setMessageText('')
+      inputRef.current.value = ''
       inputRef.current.focus()
     }
   }
@@ -77,8 +78,7 @@ const MessageInput = ({ onSubmit }) => {
   return (
     <div className='flex flex-grow'>
       <textarea
-        className="shadow appearance-none border rounded-l-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="text"
+        className="shadow resize-none text-white appearance-none border-none rounded-l-lg w-full py-2 px-3 bg-gray-900 leading-tight focus:outline-none focus:border focus:border-teal-500 focus:shadow-outline"
         placeholder="Send a message"
         value={messageText}
         ref={inputRef}
@@ -86,8 +86,14 @@ const MessageInput = ({ onSubmit }) => {
         onInput={handleInput}
         onChange={(e) => setMessageText(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey && e.target.value.trim().length > 0) {
+          const target = e.target as HTMLTextAreaElement;
+          console.log(e.key === 'Enter' && !e.shiftKey && target.value.trim().length === 0);
+          if (e.key === 'Enter' && !e.shiftKey && target.value.trim().length > 0) {
+            e.preventDefault()
             submitOnEnter()
+            inputRef.current.rows = 1
+          } else if (e.key === 'Enter' && !e.shiftKey && target.value.trim().length === 0) {
+            e.preventDefault()
           }
         }}
       />
