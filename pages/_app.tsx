@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import UserContext from 'lib/UserContext'
 import { supabase, fetchUserRoles } from 'lib/Store'
 import UserContextType from '~/lib/UserContext';
+import Head from 'next/head'
 
 export default function SupabaseSlackClone({ Component, pageProps }) {
   const [userLoaded, setUserLoaded] = useState(false)
@@ -48,6 +49,14 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
   }
 
   return (
+    <>
+      <Head>
+        <meta charSet="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
+        />
+      </Head>
     <UserContext.Provider
       value={{
         userLoaded,
@@ -58,6 +67,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
       } as any}
     >
       <Component {...pageProps} />
-    </UserContext.Provider>
+      </UserContext.Provider>
+      </>
   )
 }
