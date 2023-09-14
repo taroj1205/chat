@@ -42,7 +42,10 @@ const ChannelsPage = (props) => {
           </div>
         </div>
         <div className="p-2 absolute bottom-0 left-0 w-full">
-          <MessageInput onSubmit={async (text) => addMessage(text, channelId, user.id)} />
+          <MessageInput onSubmit={async (text) => {
+            if (text.trim().length === 0) return
+            addMessage(text, channelId, user.id)
+          }} />
         </div>
       </div>
     </Layout>

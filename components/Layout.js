@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import UserContext from '~/lib/UserContext'
-import { addChannel, deleteChannel, supabase, fetchUser } from '~/lib/Store'
+import { addChannel, deleteChannel, fetchUser } from '~/lib/Store'
 import TrashIcon from '~/components/TrashIcon'
 import { useRouter } from 'next/router'
+import { FaBars, FaTimes } from 'react-icons/fa'
 
 export default function Layout(props) {
   const { signOut, user, userRoles } = useContext(UserContext)
@@ -47,20 +48,20 @@ export default function Layout(props) {
     <main className="main flex h-screen w-screen overflow-hidden">
       {/* Sidebar */}
       <button
-        className={`text-white p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
+        className={`text-white text-2xl p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
         onClick={toggleMenu}
       >
-        ☰
+        <FaBars />
       </button>
       <nav
         className={`${sidebarStyle} md:block bg-gray-900 text-gray-100 overflow-scroll`}
         style={{ maxWidth: '20%', minWidth: 150, maxHeight: '100vh' }}
       >
         <button
-          className={`text-white p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'hidden' : 'relative'} top-1 left-1 z-10`}
+          className={`text-white p-2 focus:outline-none text-2xl md:hidden ${sidebarStyle === 'hidden' ? 'hidden' : 'relative'} top-1 left-1 z-10`}
           onClick={toggleMenu}
         >
-          X
+          <FaTimes />
         </button>
         <div className="p-2 ">
           <div className="p-2">
@@ -97,7 +98,7 @@ export default function Layout(props) {
               <SidebarItem
                 channel={x}
                 key={x.id}
-                isActiveChannel={x.id === props.activeChannelId}
+                isActiveChannel={x.id.toString() === props.activeChannelId}
                 user={user}
                 userRoles={userRoles}
               />
@@ -113,16 +114,20 @@ export default function Layout(props) {
 }
 
 const SidebarItem = ({ channel, isActiveChannel, user, userRoles }) => (
-  <>
-    <li className="flex items-center justify-between">
-      <Link href="/channels/[id]" as={`/channels/${channel.id}`} className={isActiveChannel ? 'font-bold' : ''}>
-        {channel.slug}
-      </Link>
+  <li className="flex items-center">
+    <Link
+      href={`/channels/${channel.id}`}
+      className={`flex items-center w-full py-2 px-4 ${isActiveChannel ? 'bg-gray-700 font-bold text-white' : 'text-gray-500 hover:text-white hover:bg-gray-700 transition duration-300 ease-in-out'}`}
+    >
+      <span className="flex-grow ml-2">{channel.slug}</span>
       {channel.id !== 1 && (channel.created_by === user?.id || userRoles.includes('admin')) && (
-        <button onClick={() => deleteChannel(channel.id)}>
+        <button onClick={(e) => {
+          e.preventDefault()
+          deleteChannel(channel.id)
+        }}>
           <TrashIcon />
         </button>
       )}
-    </li>
-  </>
-)
+    </Link>
+  </li>
+);

@@ -1,18 +1,20 @@
 import { useState } from 'react'
 import { supabase } from 'lib/Store'
+import { useRouter } from 'next/router'
 
 const Home = () => {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
-  const handleLogin = async (type, username, password) => {
+  const handleLogin = async (type, email, password) => {
     try {
       setLoading(true)
       const { error, data: { user } } =
         type === 'LOGIN'
-          ? await supabase.auth.signInWithPassword({ email: username, password })
-          : await supabase.auth.signUp({ email: username, password })
+          ? await supabase.auth.signInWithPassword({ email, password })
+          : await supabase.auth.signUp({ email, password })
       // If the user doesn't exist here and an error hasn't been raised yet,
       // that must mean that a confirmation email has been sent.
       // NOTE: Confirming your email address is required by default.
@@ -22,7 +24,7 @@ const Home = () => {
       } else if (type === 'SIGNUP') alert('Signup successful, confirmation mail should be sent soon!')
       else if (type === 'LOGIN') {
         alert('Login successful!')
-        redirect('/channels')
+        router.push('/channels/1')
       }
     } catch (error) {
       console.log('error', error)
@@ -37,14 +39,12 @@ const Home = () => {
           <div className="mb-4">
             <label className="font-bold text-grey-darker block mb-2">Email</label>
             <input
-              type="text"
-              className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow"
-              placeholder="Your Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              className="block mb-4 appearance-none w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow"
+              placeholder="Your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-          </div>
-          <div className="mb-4">
             <label className="font-bold text-grey-darker block mb-2">Password</label>
             <input
               type="password"
@@ -60,7 +60,7 @@ const Home = () => {
               onClick={(e) => {
                 e.preventDefault()
                 setLoading(true)
-                handleLogin('SIGNUP', username, password)
+                handleLogin('SIGNUP', email, password)
               }}
               disabled={loading}
               className={`bg-indigo-700 hover:bg-teal text-white py-2 px-4 rounded text-center transition duration-150 hover:bg-indigo-600 hover:text-white ${loading ? 'cursor-not-allowed' : ''}`}
@@ -71,7 +71,7 @@ const Home = () => {
               onClick={(e) => {
                 e.preventDefault()
                 setLoading(true)
-                handleLogin('LOGIN', username, password)
+                handleLogin('LOGIN', email, password)
               }}
               disabled={loading}
               className={`border border-indigo-700 text-indigo-700 py-2 px-4 rounded w-full text-center transition duration-150 hover:bg-indigo-700 hover:text-white ${loading ? 'cursor-not-allowed' : ''}`}
