@@ -1,13 +1,24 @@
 import Link from 'next/link'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import UserContext from '~/lib/UserContext'
-import { addChannel, deleteChannel } from '~/lib/Store'
+import { addChannel, deleteChannel, supabase, fetchUser } from '~/lib/Store'
 import TrashIcon from '~/components/TrashIcon'
 import { useRouter } from 'next/router'
 
 export default function Layout(props) {
   const { signOut, user, userRoles } = useContext(UserContext)
   const router = useRouter()
+  const [username, setUsername] = useState(null)
+
+  useEffect(() => {
+    if (!user) return
+    fetchUser(user.id, (data) => {
+      console.log(data)
+      setUsername(data.username)
+    })
+  }, [user])
+
+  console.log(user);
 
   const slugify = (text) => {
     return text
@@ -45,7 +56,7 @@ export default function Layout(props) {
           </div>
           <hr className="m-2" />
           <div className="p-2 flex flex-col space-y-2">
-            <h6 className="text-xs">{user?.email}</h6>
+            <h6 className="text-xs">User: {username}</h6>
             <Link
               className="text-center bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 rounded w-full transition duration-150"
               href={"/settings"}
