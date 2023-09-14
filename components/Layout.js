@@ -9,6 +9,7 @@ export default function Layout(props) {
   const { signOut, user, userRoles } = useContext(UserContext)
   const router = useRouter()
   const [username, setUsername] = useState(null)
+  const [sidebarStyle, setSidebarStyle] = useState('hidden')
 
   useEffect(() => {
     if (!user) return
@@ -38,13 +39,29 @@ export default function Layout(props) {
     }
   }
 
+  const toggleMenu = () => {
+    setSidebarStyle(sidebarStyle === 'hidden' ? 'w-64' : 'hidden')
+  };
+
   return (
     <main className="main flex h-screen w-screen overflow-hidden">
       {/* Sidebar */}
+      <button
+        className={`text-white p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
+        onClick={toggleMenu}
+      >
+        ☰
+      </button>
       <nav
-        className="w-64 bg-gray-900 text-gray-100 overflow-scroll "
+        className={`${sidebarStyle} md:block bg-gray-900 text-gray-100 overflow-scroll`}
         style={{ maxWidth: '20%', minWidth: 150, maxHeight: '100vh' }}
       >
+        <button
+          className={`text-white p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'hidden' : 'relative'} top-1 left-1 z-10`}
+          onClick={toggleMenu}
+        >
+          X
+        </button>
         <div className="p-2 ">
           <div className="p-2">
             <button
