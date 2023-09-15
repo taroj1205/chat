@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import UserContext from 'lib/UserContext'
 import { supabase, fetchUserRoles } from 'lib/Store'
-import UserContextType from '~/lib/UserContext';
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { ThemeSwitcher } from '~/components/ThemeSwitcher'

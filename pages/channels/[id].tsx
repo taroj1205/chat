@@ -30,6 +30,10 @@ const ChannelsPage = (props) => {
     }
   }, [channels, channelId])
 
+  useEffect(() => {
+    if (!user && authLoaded) router.push('/auth')
+  }, [authLoaded])
+
   // Render the channels and messages
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={expanded}>
