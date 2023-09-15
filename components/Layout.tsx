@@ -41,6 +41,7 @@ export default function Layout(props) {
   }
 
   const toggleMenu = () => {
+    props.setExpanded(!props.expanded)
     setSidebarStyle(sidebarStyle === 'hidden' ? 'w-screen' : 'hidden')
   };
 

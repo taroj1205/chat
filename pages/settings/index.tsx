@@ -37,7 +37,7 @@ const SettingsPage = () => {
                 <input
                     type="text"
                     id="username"
-                    className="border-gray-400 text-black border rounded w-full py-2 px-3"
+                    className="border-gray-400 text-black dark:text-white border rounded w-full py-2 px-3"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />

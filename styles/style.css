@@ -10,8 +10,17 @@ body,
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: rgb(31, 41, 55);
   color: white;
+}
+
+@layer base {
+  body {
+    @apply text-black dark:text-white dark:bg-[#1e1e1e] bg-white font-sans text-base;
+  }
+}
+
+a {
+  @apply text-blue-500;
 }
 
 .channel-list {

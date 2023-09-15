@@ -5,6 +5,8 @@ import UserContext from 'lib/UserContext'
 import { supabase, fetchUserRoles } from 'lib/Store'
 import UserContextType from '~/lib/UserContext';
 import Head from 'next/head'
+import { ThemeProvider } from 'next-themes'
+import { ThemeSwitcher } from '~/components/ThemeSwitcher'
 
 export default function SupabaseSlackClone({ Component, pageProps }) {
   const [userLoaded, setUserLoaded] = useState(false)
@@ -28,7 +30,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
       }
     }
 
-    supabase.auth.getSession().then(({ data: { session }}) => saveSession(session))
+    supabase.auth.getSession().then(({ data: { session } }) => saveSession(session))
 
     const { subscription: authListener }: any = supabase.auth.onAuthStateChange(async (event, session) => saveSession(session))
 
@@ -57,17 +59,20 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
           content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
         />
       </Head>
-    <UserContext.Provider
-      value={{
-        userLoaded,
-        user,
-        userRoles,
-        signIn,
-        signOut,
-      } as any}
-    >
-      <Component {...pageProps} />
+      <UserContext.Provider
+        value={{
+          userLoaded,
+          user,
+          userRoles,
+          signIn,
+          signOut,
+        } as any}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className='fixed z-10 top-1 right-1'><ThemeSwitcher /></div>
+            <Component {...pageProps} />
+        </ThemeProvider>
       </UserContext.Provider>
-      </>
+    </>
   )
 }
