@@ -54,7 +54,7 @@ export default function Layout(props) {
         <FaBars />
       </button>
       <nav
-        className={`${sidebarStyle} md:max-w-[30%] w-52 md:block bg-gray-900 text-gray-100 overflow-scroll`}
+        className={`${sidebarStyle} top-0 md:max-w-[30%] w-52 md:block bg-gray-900 text-gray-100 overflow-scroll`}
         style={{ minWidth: 150, maxHeight: '100vh' }}
       >
         <button
@@ -63,7 +63,7 @@ export default function Layout(props) {
         >
           <FaTimes />
         </button>
-        <div className="p-2 ">
+        <div className="p-2">
           <hr className="m-2" />
           <div className="p-2 flex flex-col space-y-2">
             <h6 className="text-xs">User: {username}</h6>
