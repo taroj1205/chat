@@ -36,7 +36,7 @@ const ChannelsPage = (props) => {
 
   // Render the channels and messages
   return (
-    <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={expanded}>
+    <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative" style={{height: 'var(--vvh)'}}>
         <div className="Messages h-full pb-16">
           <div className="p-2 overflow-y-auto">

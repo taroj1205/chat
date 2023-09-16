@@ -2,10 +2,10 @@ import { supabase } from "~/lib/Store"
 import styles from './App.module.css'
 import { SocialLayout, ThemeSupa, ViewType } from '@supabase/auth-ui-shared'
 import { Auth } from '@supabase/auth-ui-react'
-import { useState } from 'react'
-import ToggleButton from '~/components/auth/ToggleButton'
-import MenuIcon from '~/components/auth/MenuIcon'
+import { useContext, useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
+import UserContext from "~/lib/UserContext"
+import {useRouter} from "next/router"
 
 const classes: { [key: string]: string } = {
     'rgb(202, 37, 37)': styles['container-redshadow'],
@@ -40,6 +40,13 @@ function App() {
     const { resolvedTheme, setTheme } = useTheme()
     const [socialLayout, setSocialLayout] = useState<SocialLayout>(socialAlignments[1] satisfies SocialLayout)
     const [view, setView] = useState(views[0])
+    const { user, authLoaded, signOut } = useContext(UserContext)
+    const router = useRouter()
+
+    useEffect(() => {
+        console.log(user)
+        if (user) router.push('/channels/1')
+    }, [authLoaded])
 
     return (
         <div className="relative py-2 pb-16 text-black dark:text-white">
