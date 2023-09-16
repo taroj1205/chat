@@ -78,7 +78,7 @@ const MessageInput = ({ onSubmit }) => {
   return (
     <div className='flex flex-grow'>
       <textarea
-        className="shadow resize-none text-black dark:text-white appearance-none border-none rounded-l-lg w-full py-2 px-3 bg-gray-300 dark:bg-gray-900 leading-tight focus:outline-none focus:border focus:border-teal-500 focus:shadow-outline"
+        className="shadow resize-none text-black dark:text-white appearance-none border-none rounded-l-lg w-full py-2 px-3 bg-white dark:bg-gray-900 leading-tight focus:outline-none focus:border focus:border-teal-500 focus:shadow-outline"
         placeholder="Send a message"
         value={messageText}
         ref={inputRef}
