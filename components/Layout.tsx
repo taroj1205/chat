@@ -56,7 +56,7 @@ export default function Layout(props) {
         <FaBars />
       </button>
       <nav
-        className={`${sidebarStyle} top-0 md:max-w-[30%] w-52 md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-scroll`}
+        className={`${sidebarStyle} top-0 md:max-w-[30%] w-52 md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
         style={{ minWidth: 150, maxHeight: '100vh' }}
       >
         <button
