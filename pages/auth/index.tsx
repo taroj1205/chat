@@ -35,7 +35,7 @@ const views: { id: ViewType; title: string }[] = [
 ]
 
 function App() {
-    const [brandColor, setBrandColor] = useState(colors[0] as string)
+    const [brandColor, setBrandColor] = useState(colors[2] as string)
     const [borderRadius, setBorderRadius] = useState(radii[0] as string)
     const { resolvedTheme, setTheme } = useTheme()
     const [socialLayout, setSocialLayout] = useState<SocialLayout>(socialAlignments[1] satisfies SocialLayout)
