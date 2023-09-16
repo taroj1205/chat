@@ -47,7 +47,7 @@ export default function Layout(props) {
   };
 
   return (
-    <main className="main flex w-screen overflow-hidden" style={{ height: "var(--vvh)" }}>
+    <main className="main flex w-[var(--vvw)] overflow-hidden h-[var(--vvh)]">
       {/* Sidebar */}
       <button
         className={`text-black dark:text-white text-2xl p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
@@ -56,7 +56,7 @@ export default function Layout(props) {
         <FaBars />
       </button>
       <nav
-        className={`z-[2] fixed left-0 ${sidebarStyle} top-0 w-[var(--vvh)] md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
+        className={`z-[2] fixed md:relative md:max-w-sm left-0 ${sidebarStyle} top-0 h-full w-[var(--vvw)] md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
         style={{ minWidth: 150, maxHeight: '100vh' }}
       >
         <button
@@ -112,7 +112,7 @@ export default function Layout(props) {
       </nav>
 
       {/* Messages */}
-      <div className="fixed z-[1] w-[var(--vvw] flex-1 bg-slate-200 dark:bg-gray-800 text-black dark:text-white" style={{height: 'var(--vvh)'}}>{props.children}</div>
+      <div className="fixed md:relative z-[1] w-[var(--vvw] flex-1 bg-slate-200 dark:bg-gray-800 text-black dark:text-white" style={{height: 'var(--vvh)'}}>{props.children}</div>
     </main>
   )
 }

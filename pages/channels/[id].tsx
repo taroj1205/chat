@@ -38,7 +38,7 @@ const ChannelsPage = (props) => {
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative" style={{height: 'var(--vvh)'}}>
-        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] pb-16">
+        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-16">
           <div className="p-2 overflow-y-auto">
             {messages.map((x) => (
               <Message key={x.id} message={x} />
@@ -46,7 +46,7 @@ const ChannelsPage = (props) => {
             <div ref={messagesEndRef} style={{ height: 0 }} />
           </div>
         </div>
-        <div className={`p-2 fixed bottom-0 left-0 w-full`}>
+        <div className={`p-2 fixed md:absolute bottom-0 left-0 w-full`}>
           <MessageInput onSubmit={async (text) => {
             if (text.trim().length === 0) return
             addMessage(text, channelId, user.id)
