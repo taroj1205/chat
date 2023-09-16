@@ -62,7 +62,7 @@ function App() {
                                         </h1>
                                     </div>
                                     <p className="text-auth-widget-test">
-                                        Sign in today!
+                                        Join us today!
                                     </p>
                                 </div>
                                 <Auth
