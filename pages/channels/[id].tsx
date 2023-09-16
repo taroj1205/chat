@@ -38,7 +38,7 @@ const ChannelsPage = (props) => {
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative" style={{height: 'var(--vvh)'}}>
-        <div className="Messages h-full pb-16">
+        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] pb-16">
           <div className="p-2 overflow-y-auto">
             {messages.map((x) => (
               <Message key={x.id} message={x} />
