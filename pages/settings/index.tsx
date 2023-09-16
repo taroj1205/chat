@@ -31,13 +31,13 @@ const SettingsPage = () => {
         <div className="max-w-md mx-auto">
             <h1 className="text-2xl font-bold mb-4">Profile</h1>
             <div className="mb-4">
-                <label htmlFor="username" className="block font-medium mb-2">
+                <label htmlFor="username" className="block text-black dark:text-white font-medium mb-2">
                     Username
                 </label>
                 <input
                     type="text"
                     id="username"
-                    className="border-gray-400 text-black border rounded w-full py-2 px-3"
+                    className="border-gray-400 text-black dark:text-white border rounded w-full py-2 px-3"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />

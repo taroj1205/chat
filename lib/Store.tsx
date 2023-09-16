@@ -11,6 +11,7 @@ export const useStore = (props) => {
   const [messages, setMessages] = useState([])
   const [users] = useState(new Map())
   const [newMessage, handleNewMessage] = useState(null)
+  const [updatedMessage, handleUpdatedMessage] = useState(null)
   const [newChannel, handleNewChannel] = useState(null)
   const [newOrUpdatedUser, handleNewOrUpdatedUser] = useState(null)
   const [deletedChannel, handleDeletedChannel] = useState(null)
@@ -59,17 +60,19 @@ export const useStore = (props) => {
         { event: 'DELETE', schema: 'public', table: 'channels' },
         (payload) => handleDeletedChannel(payload.old)
     )
-      .on(
-        'postgres_changes', // Add a new listener for updates
-        { event: 'UPDATE', schema: 'public', table: 'messages' },
-        (payload) => {
-          const updatedMessage = payload.new;
-          // Check if deleted_at is not null
-          if (updatedMessage && updatedMessage.deleted_at !== null) {
-            handleDeletedMessage(updatedMessage); // Delete the message from the state
+        .on(
+          'postgres_changes', // Add a new listener for updates
+          { event: 'UPDATE', schema: 'public', table: 'messages' },
+          (payload) => {
+            const updatedMessage = payload.new;
+            // Check if deleted_at is null or undefined
+            if (updatedMessage && updatedMessage.deleted_at == null) {
+              handleUpdatedMessage(updatedMessage); // Update the message in the state
+            } else if (updatedMessage && updatedMessage.deleted_at !== null) {
+              handleDeletedMessage(updatedMessage); // Delete the message from the state
+            }
           }
-        }
-    )
+      )
       .on(
         'postgres_changes', // Add a new listener for updates
         { event: 'UPDATE', schema: 'public', table: 'channels' },
@@ -116,6 +119,19 @@ export const useStore = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newMessage])
+
+  // Updated message received from Postgres
+  useEffect(() => {
+    if (updatedMessage && updatedMessage.channel_id === Number(props.channelId)) {
+      const handleAsync = async () => {
+        let authorId = updatedMessage.user_id
+        if (!users.get(authorId)) await fetchUser(authorId, (user) => handleNewOrUpdatedUser(user))
+        setMessages(messages.map(message => message.id === updatedMessage.id ? updatedMessage : message))
+      }
+      handleAsync()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatedMessage])
 
   // Deleted message received from postgres
   useEffect(() => {
@@ -268,6 +284,27 @@ export const deleteMessage = async (message_id) => {
     let { data } = await supabase
       .from('messages')
       .update({ deleted_at: new Date().toISOString() })
+      .match({ id: message_id })
+    return data
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
+/**
+ * Update a message in the DB
+ * @param {number} message_id
+ * @param {string} new_message
+ */
+export const editMessage = async (message_id, new_message) => {
+  try {
+
+    const newMessage = prompt('Enter a new message:', new_message)
+    if (newMessage === null || newMessage === new_message || newMessage.trim().length === 0) return
+
+    let { data } = await supabase
+      .from('messages')
+      .update({ message: newMessage })
       .match({ id: message_id })
     return data
   } catch (error) {

@@ -41,6 +41,8 @@ export default function Layout(props) {
   }
 
   const toggleMenu = () => {
+    console.log(props)
+    props.setExpanded(!props.expanded)
     setSidebarStyle(sidebarStyle === 'hidden' ? 'w-screen' : 'hidden')
   };
 
@@ -48,22 +50,22 @@ export default function Layout(props) {
     <main className="main flex w-screen overflow-hidden" style={{ height: "var(--vvh)" }}>
       {/* Sidebar */}
       <button
-        className={`text-white text-2xl p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
+        className={`text-black dark:text-white text-2xl p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
         onClick={toggleMenu}
       >
         <FaBars />
       </button>
       <nav
-        className={`${sidebarStyle} md:max-w-[30%] w-52 md:block bg-gray-900 text-gray-100 overflow-scroll`}
+        className={`${sidebarStyle} top-0 md:max-w-[30%] w-52 md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
         style={{ minWidth: 150, maxHeight: '100vh' }}
       >
         <button
-          className={`text-white p-2 focus:outline-none text-2xl md:hidden ${sidebarStyle === 'hidden' ? 'hidden' : 'relative'} top-1 left-1 z-10`}
+          className={`text-black dark:text-white p-2 focus:outline-none text-2xl md:hidden ${sidebarStyle === 'hidden' ? 'hidden' : 'relative'} top-1 left-1 z-10`}
           onClick={toggleMenu}
         >
           <FaTimes />
         </button>
-        <div className="p-2 ">
+        <div className="p-2">
           <hr className="m-2" />
           <div className="p-2 flex flex-col space-y-2">
             <h6 className="text-xs">User: {username}</h6>
@@ -110,7 +112,7 @@ export default function Layout(props) {
       </nav>
 
       {/* Messages */}
-      <div className="flex-1 bg-gray-800 h-screen">{props.children}</div>
+      <div className="flex-1 bg-slate-200 dark:bg-gray-800 text-black dark:text-white" style={{height: 'var(--vvh)'}}>{props.children}</div>
     </main>
   )
 }

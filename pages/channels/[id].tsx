@@ -3,13 +3,14 @@ import Message from '~/components/Message'
 import MessageInput from '~/components/MessageInput'
 import { useRouter } from 'next/router'
 import { useStore, addMessage } from '~/lib/Store'
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import UserContext from '~/lib/UserContext'
 
 const ChannelsPage = (props) => {
   const router = useRouter()
   const { user, authLoaded, signOut } = useContext(UserContext)
   const messagesEndRef = useRef(null)
+  const [expanded, setExpanded] = useState(false)
 
   // Else load up the page
   const { id: channelId } = router.query
@@ -29,10 +30,14 @@ const ChannelsPage = (props) => {
     }
   }, [channels, channelId])
 
+  useEffect(() => {
+    if (!user && authLoaded) router.push('/auth')
+  }, [authLoaded])
+
   // Render the channels and messages
   return (
-    <Layout channels={channels} activeChannelId={channelId}>
-      <div className="relative h-screen">
+    <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
+      <div className="relative" style={{height: 'var(--vvh)'}}>
         <div className="Messages h-full pb-16">
           <div className="p-2 overflow-y-auto">
             {messages.map((x) => (
@@ -41,7 +46,7 @@ const ChannelsPage = (props) => {
             <div ref={messagesEndRef} style={{ height: 0 }} />
           </div>
         </div>
-        <div className="p-2 absolute bottom-0 left-0 w-full">
+        <div className={`p-2 ${!expanded ? 'fixed bottom-0 left-0 w-full' : 'absolute'} absolute bottom-0 left-0 w-full`}>
           <MessageInput onSubmit={async (text) => {
             if (text.trim().length === 0) return
             addMessage(text, channelId, user.id)
