@@ -88,7 +88,7 @@ function App() {
                                             },
                                         },
                                     }}
-                                    providers={['google', 'azure', 'github']}
+                                    providers={['azure', 'github']}
                                     socialLayout={socialLayout[1] as SocialLayout}
                                     theme={resolvedTheme}
                                 />
