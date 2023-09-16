@@ -83,7 +83,7 @@ const Message = ({ message }) => {
             </span>
           </span>
         </div>
-        <p className="text-white">{message.message}</p>
+        <p className="text-black dark:text-white">{message.message}</p>
       </div>
     </div>
   )
