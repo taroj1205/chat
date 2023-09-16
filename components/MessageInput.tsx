@@ -21,7 +21,7 @@ const MessageInput = ({ onSubmit }) => {
         const root = document.documentElement;
         root.style.setProperty(
           '--vvw',
-          `${document.documentElement.clientWidth}px`
+          `${window.innerWidth}px`
         );
         root.style.setProperty(
           '--vvh',

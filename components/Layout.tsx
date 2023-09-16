@@ -56,7 +56,7 @@ export default function Layout(props) {
         <FaBars />
       </button>
       <nav
-        className={`${sidebarStyle} top-0 md:max-w-[30%] w-52 md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
+        className={`z-[2] fixed left-0 ${sidebarStyle} top-0 w-[var(--vvh)] md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
         style={{ minWidth: 150, maxHeight: '100vh' }}
       >
         <button
@@ -112,7 +112,7 @@ export default function Layout(props) {
       </nav>
 
       {/* Messages */}
-      <div className="flex-1 bg-slate-200 dark:bg-gray-800 text-black dark:text-white" style={{height: 'var(--vvh)'}}>{props.children}</div>
+      <div className="fixed z-[1] w-[var(--vvw] flex-1 bg-slate-200 dark:bg-gray-800 text-black dark:text-white" style={{height: 'var(--vvh)'}}>{props.children}</div>
     </main>
   )
 }
