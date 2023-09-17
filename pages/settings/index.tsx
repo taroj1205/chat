@@ -1,31 +1,36 @@
-import { useState, useContext } from 'react'
-import { supabase } from '~/lib/Store'
-import UserContext from '~/lib/UserContext'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { useRouter } from 'next/router'
+import { useState, useContext } from 'react';
+import { supabase } from '~/lib/Store';
+import UserContext from '~/lib/UserContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/router';
 
 const SettingsPage = () => {
-    const { user, setUser } = useContext(UserContext)
-    const [username, setUsername] = useState(user?.user_metadata?.username || '')
-    const router = useRouter()
+    const { user, setUser, authLoaded } = useContext(UserContext);
+    const [username, setUsername] = useState(user?.user_metadata?.username || '');
+    const router = useRouter();
 
     const handleSave = async () => {
-        const { error } = await supabase
-            .from('users')
-            .update({ username })
-            .eq('id', user.id)
-        if (error) {
-            console.error(error)
-            toast.error('Update failed')
-        } else {
-            console.log('Updated successfully!')
-            toast.success('Updated successfully!')
-            setTimeout(() => {
-                router.push('/channels/1')
-            }, 3000)
+        try {
+            const { error } = await supabase
+                .from('users')
+                .update({ username })
+                .eq('id', user.id);
+
+            if (error) {
+                console.error(error);
+                toast.error('Update failed');
+            } else {
+                console.log('Updated successfully!');
+                toast.success('Updated successfully!');
+                setTimeout(() => {
+                    router.push('/channels/1');
+                }, 3000);
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
         }
-    }
+    };
 
     return (
         <div className="max-w-md mx-auto">
@@ -48,12 +53,13 @@ const SettingsPage = () => {
             >
                 Save
             </button>
+
+            {/* Profile Picture */}
+
             <ToastContainer
                 className="text-sm font-bold"
                 toastClassName={({ type }) =>
-                    type === 'success'
-                        ? 'bg-green-500 text-white font-bold'
-                        : 'bg-red-500 text-white font-bold'
+                    type === 'success' ? 'bg-green-500 text-white font-bold' : 'bg-red-500 text-white font-bold'
                 }
                 position="top-right"
                 autoClose={3000}
@@ -66,7 +72,7 @@ const SettingsPage = () => {
                 pauseOnHover
             />
         </div>
-    )
-}
+    );
+};
 
-export default SettingsPage
+export default SettingsPage;

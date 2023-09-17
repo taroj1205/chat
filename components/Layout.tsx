@@ -5,18 +5,25 @@ import { addChannel, deleteChannel, fetchUser } from '~/lib/Store'
 import TrashIcon from '~/components/TrashIcon'
 import { useRouter } from 'next/router'
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa'
+import Image from 'next/image'
+import ProfilePicture from './ProfilePicture'
+import Username from './Username'
 
 export default function Layout(props) {
   const { signOut, user, userRoles } = useContext(UserContext)
   const router = useRouter()
   const [username, setUsername] = useState(null)
+  const [avatar, setAvatar] = useState(null)
   const [sidebarStyle, setSidebarStyle] = useState('hidden')
+  const [userId, setUserId] = useState(null)
 
   useEffect(() => {
     if (!user) return
     fetchUser(user.id, (data) => {
       console.log(data)
       setUsername(data.username)
+      setAvatar(data.avatar)
+      setUserId(data.id)
     })
   }, [user])
 
@@ -47,7 +54,7 @@ export default function Layout(props) {
   };
 
   return (
-    <main className="main flex w-screen overflow-hidden" style={{ height: "var(--vvh)" }}>
+    <main className="main flex w-[var(--vvw)] overflow-hidden h-[var(--vvh)]">
       {/* Sidebar */}
       <button
         className={`text-black dark:text-white text-2xl p-2 focus:outline-none md:hidden ${sidebarStyle === 'hidden' ? 'fixed' : 'hidden'} top-1 left-1 z-10`}
@@ -56,7 +63,7 @@ export default function Layout(props) {
         <FaBars />
       </button>
       <nav
-        className={`${sidebarStyle} top-0 md:max-w-[30%] w-52 md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
+        className={`z-[2] fixed md:relative md:max-w-[300px] left-0 ${sidebarStyle} top-0 h-full w-[var(--vvw)] md:block bg-slate-400 dark:bg-gray-900 text-gray-100 overflow-auto`}
         style={{ minWidth: 150, maxHeight: '100vh' }}
       >
         <button
@@ -68,13 +75,20 @@ export default function Layout(props) {
         <div className="p-2">
           <hr className="m-2" />
           <div className="p-2 flex flex-col space-y-2">
-            <h6 className="text-xs">User: {username}</h6>
-            <Link
+            {username && userId ? (
+              <div className='flex flex-col md:flex-row items-center w-full space-y-2 md:space-y-0'>
+                <span className="mr-2"><ProfilePicture avatar={avatar} setAvatar={setAvatar} username={username} userId={userId} /></span>
+                <span className="w-full"><Username username={username} userId={userId} setUsername={setUsername} /></span>
+              </div>
+            ) : (
+              null
+            )}
+            {/* <Link
               className="text-center bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 rounded w-full transition duration-150"
               href={"/settings"}
             >
               Settings
-            </Link>
+            </Link> */}
             <button
               className="bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 rounded w-full transition duration-150"
               onClick={() => {
@@ -112,7 +126,7 @@ export default function Layout(props) {
       </nav>
 
       {/* Messages */}
-      <div className="flex-1 bg-slate-200 dark:bg-gray-800 text-black dark:text-white" style={{height: 'var(--vvh)'}}>{props.children}</div>
+      <div className="fixed md:relative z-[1] w-[var(--vvw] flex-1 bg-slate-200 dark:bg-gray-800 text-black dark:text-white" style={{ height: 'var(--vvh)' }}>{props.children}</div>
     </main>
   )
 }

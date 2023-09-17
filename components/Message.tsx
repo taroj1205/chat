@@ -4,6 +4,7 @@ import { deleteMessage, editMessage } from '~/lib/Store'
 import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css'
 import { FaCopy, FaEdit, FaTrash } from 'react-icons/fa';
+import Image from 'next/image';
 
 const Message = ({ message }) => {
   const { user, userRoles } = useContext(UserContext)
@@ -72,18 +73,21 @@ const Message = ({ message }) => {
           </MenuItem>
         )}
       </ControlledMenu>
-      <div>
-        <div className="flex items-center">
-          <span className="text-sm font-semibold">
-            {message.author.username}
-          </span>
-          <span className="ml-1 text-xs text-gray-500">
-            <span className="ml-1 text-xs text-gray-500">
-              {formatSentOn(message.inserted_at)}
+      <div className='flex flex-row'>
+        <Image src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`} alt={message.author.username} height={50} width={50} className="w-10 h-10 mr-2 rounded-full aspect-square object-cover" />
+        <div>
+          <div className="flex items-center">
+            <span className="text-sm font-semibold">
+              {message.author.username}
             </span>
-          </span>
+            <span className="ml-1 text-xs text-gray-500">
+              <span className="ml-1 text-xs text-gray-500">
+                {formatSentOn(message.inserted_at)}
+              </span>
+            </span>
+          </div>
+          <p className="text-black dark:text-white break-words">{message.message}</p>
         </div>
-        <p className="text-black dark:text-white">{message.message}</p>
       </div>
     </div>
   )

@@ -28,7 +28,6 @@ export const useStore = (props) => {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages' },
         (payload) => {
-          console.log(payload.new)
           handleNewMessage(payload.new)
         }
       )
@@ -59,19 +58,19 @@ export const useStore = (props) => {
         'postgres_changes',
         { event: 'DELETE', schema: 'public', table: 'channels' },
         (payload) => handleDeletedChannel(payload.old)
-    )
-        .on(
-          'postgres_changes', // Add a new listener for updates
-          { event: 'UPDATE', schema: 'public', table: 'messages' },
-          (payload) => {
-            const updatedMessage = payload.new;
-            // Check if deleted_at is null or undefined
-            if (updatedMessage && updatedMessage.deleted_at == null) {
-              handleUpdatedMessage(updatedMessage); // Update the message in the state
-            } else if (updatedMessage && updatedMessage.deleted_at !== null) {
-              handleDeletedMessage(updatedMessage); // Delete the message from the state
-            }
+      )
+      .on(
+        'postgres_changes', // Add a new listener for updates
+        { event: 'UPDATE', schema: 'public', table: 'messages' },
+        (payload) => {
+          const updatedMessage = payload.new;
+          // Check if deleted_at is null or undefined
+          if (updatedMessage && updatedMessage.deleted_at == null) {
+            handleUpdatedMessage(updatedMessage); // Update the message in the state
+          } else if (updatedMessage && updatedMessage.deleted_at !== null) {
+            handleDeletedMessage(updatedMessage); // Delete the message from the state
           }
+        }
       )
       .on(
         'postgres_changes', // Add a new listener for updates
@@ -98,7 +97,6 @@ export const useStore = (props) => {
     if (props?.channelId > 0) {
       fetchMessages(props.channelId, (messages) => {
         messages.forEach((x) => {
-          console.log(x.author)
           users.set(x.user_id, x.author)
         })
         setMessages(messages)
