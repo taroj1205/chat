@@ -45,9 +45,9 @@ const ProfilePicture = ({ avatar, setAvatar, username, userId }: ProfilePictureP
             <Image
                 src={avatar || `https://www.gravatar.com/avatar/${username}?d=identicon`}
                 alt={avatar || `https://www.gravatar.com/avatar/${username}?d=identicon`}
-                height={32}
-                width={32}
-                className="w-8 h-8 rounded-full cursor-pointer aspect-square"
+                height={100}
+                width={100}
+                className="w-20 h-20 md:w-10 md:h-10 rounded-full cursor-pointer aspect-square md:mr-2 object-cover"
             />
             <div className={`${isHovering ? 'block' : 'block md:hidden'} absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 rounded-full cursor-pointer`}>
                     <FaUpload size={16} className="text-white" />

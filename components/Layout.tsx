@@ -76,7 +76,7 @@ export default function Layout(props) {
           <hr className="m-2" />
           <div className="p-2 flex flex-col space-y-2">
             {username && userId ? (
-              <div className='flex flex-row items-center w-full'>
+              <div className='flex flex-col md:flex-row items-center w-full space-y-2 md:space-y-0'>
                 <span className="mr-2"><ProfilePicture avatar={avatar} setAvatar={setAvatar} username={username} userId={userId} /></span>
                 <span className="w-full"><Username username={username} userId={userId} setUsername={setUsername} /></span>
               </div>

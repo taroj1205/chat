@@ -1,48 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import {FaPaperPlane} from 'react-icons/fa'
+import { FaPaperPlane } from 'react-icons/fa'
 
 const MessageInput = ({ onSubmit }) => {
   const [messageText, setMessageText] = useState('')
   const inputRef = useRef<HTMLTextAreaElement>()
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIfMobile = () => {
-      const mobileMediaQuery = window.matchMedia('(max-width: 767px)');
-      const isMobileDevice =
-        mobileMediaQuery.matches ||
-        typeof window.orientation !== 'undefined';
-      setIsMobile(isMobileDevice);
-    };
-
-    const setVisualViewport = () => {
-      const vv = document.documentElement;
-      if (vv) {
-        const root = document.documentElement;
-        root.style.setProperty(
-          '--vvw',
-          `${window.innerWidth}px`
-        );
-        root.style.setProperty(
-          '--vvh',
-          `${window.innerHeight}px`
-        );
-      }
-      checkIfMobile();
-    };
-
-    setVisualViewport();
-
-    return () => {
-      window.removeEventListener('resize', setVisualViewport);
-      if (document.documentElement) {
-        document.documentElement.removeEventListener(
-          'resize',
-          setVisualViewport
-        );
-      }
-    };
-  }, []);
 
   const submitOnEnter = () => {
     if (messageText.trim().length === 0) {
@@ -65,7 +26,7 @@ const MessageInput = ({ onSubmit }) => {
     const target = event.target;
     let rows = target.value.split('\n').length;
 
-    if (rows > 5 && isMobile) {
+    if (rows > 5 && window.innerWidth < 640) {
       rows = 5;
     } else if (rows > 10) {
       rows = 10;

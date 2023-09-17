@@ -41,7 +41,7 @@ const ChannelsPage = () => {
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative h-[var(--vvh)]">
         <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-16">
-          <div className="p-2 overflow-y-auto">
+          <div className="p-2 pl-1 overflow-y-auto">
             {messages.map((message) => (
               <Message key={message.id} message={message} />
             ))}

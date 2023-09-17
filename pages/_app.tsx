@@ -15,6 +15,29 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
   const router = useRouter()
 
   useEffect(() => {
+    const setVisualViewport = () => {
+      const root = document.documentElement;
+      root.style.setProperty(
+        '--vvw',
+        `${window.innerWidth}px`
+      );
+      root.style.setProperty(
+        '--vvh',
+        `${window.innerHeight}px`
+      );
+      console.log(window.innerWidth, window.innerHeight);
+    };
+
+    setVisualViewport();
+
+    window.addEventListener('resize', setVisualViewport);
+
+    return () => {
+      window.removeEventListener('resize', setVisualViewport);
+    };
+  }, []);
+
+  useEffect(() => {
     function saveSession(
       /** @type {Awaited<ReturnType<typeof supabase.auth.getSession>>['data']['session']} */
       session
