@@ -91,7 +91,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
         } as any}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className='fixed z-10 top-1 right-1'><ThemeSwitcher /></div>
+          <div className='fixed z-10 top-1 right-1 transition-colors duration-200'><ThemeSwitcher /></div>
             <Component {...pageProps} />
         </ThemeProvider>
       </UserContext.Provider>
