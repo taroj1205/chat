@@ -1,4 +1,7 @@
 module.exports = {
+    images: {
+        domains: ['www.gravatar.com', 'xtfywqvybzosyisgztuw.supabase.co'],
+    },
     async redirects() {
         return [
             {

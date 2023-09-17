@@ -6,55 +6,57 @@ import { useStore, addMessage } from '~/lib/Store'
 import { useContext, useEffect, useRef, useState } from 'react'
 import UserContext from '~/lib/UserContext'
 
-const ChannelsPage = (props) => {
-  const router = useRouter()
-  const { user, authLoaded, signOut } = useContext(UserContext)
-  const messagesEndRef = useRef(null)
-  const [expanded, setExpanded] = useState(false)
+const ChannelsPage = () => {
+  const router = useRouter();
+  const { user, authLoaded } = useContext(UserContext);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
 
-  // Else load up the page
-  const { id: channelId } = router.query
-  const { messages, channels } = useStore({ channelId })
+  const channelId = router.query.id as string;
+  const { messages, channels } = useStore({ channelId });
 
   useEffect(() => {
-    messagesEndRef.current.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth',
-    })
-  }, [messages])
-
-  // redirect to public channel when current channel is deleted
-  useEffect(() => {
-    if (!channels.some((channel) => channel.id === Number(channelId))) {
-      router.push('/channels/1')
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
     }
-  }, [channels, channelId])
+  }, [messages]);
 
   useEffect(() => {
-    if (!user && authLoaded) router.push('/auth')
-  }, [authLoaded])
+    const channelExists = channels.some((channel) => channel.id === Number(channelId));
+    if (!channelExists) {
+      router.push('/channels/1');
+    }
+  }, [channels, channelId]);
 
-  // Render the channels and messages
+  useEffect(() => {
+    if (!user && authLoaded) {
+      router.push('/auth');
+    }
+  }, [user, authLoaded]);
+
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
-      <div className="relative" style={{height: 'var(--vvh)'}}>
+      <div className="relative h-[var(--vvh)]">
         <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-16">
           <div className="p-2 overflow-y-auto">
-            {messages.map((x) => (
-              <Message key={x.id} message={x} />
+            {messages.map((message) => (
+              <Message key={message.id} message={message} />
             ))}
             <div ref={messagesEndRef} style={{ height: 0 }} />
           </div>
         </div>
-        <div className={`p-2 fixed md:absolute bottom-0 left-0 w-full`}>
+        <div className="p-2 fixed md:absolute bottom-0 left-0 w-full">
           <MessageInput onSubmit={async (text) => {
-            if (text.trim().length === 0) return
-            addMessage(text, channelId, user.id)
+            if (text.trim().length === 0) return;
+            addMessage(text, channelId, user.id);
           }} />
         </div>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default ChannelsPage
+export default ChannelsPage;
