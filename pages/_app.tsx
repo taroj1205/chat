@@ -6,6 +6,8 @@ import { supabase, fetchUserRoles } from 'lib/Store'
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { ThemeSwitcher } from '~/components/ThemeSwitcher'
+import Script from 'next/script'
+import { NextScript } from 'next/document'
 
 export default function SupabaseSlackClone({ Component, pageProps }) {
   const [userLoaded, setUserLoaded] = useState(false)
@@ -80,6 +82,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
           name="viewport"
           content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
         />
+        <Script async src="https://analytics.umami.is/script.js" data-website-id="2ee28e12-4b46-4d7c-a261-b83e1c148211"></Script>
       </Head>
       <UserContext.Provider
         value={{
