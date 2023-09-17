@@ -74,7 +74,7 @@ const Message = ({ message }) => {
         )}
       </ControlledMenu>
       <div className='flex flex-row'>
-        <Image src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`} alt={message.author.username} height={32} width={32} className="w-8 h-8 rounded-full mr-2" />
+        <Image src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`} alt={message.author.username} height={32} width={32} className="w-8 h-8 rounded-full aspect-square mr-2" />
         <div>
           <div className="flex items-center">
             <span className="text-sm font-semibold">

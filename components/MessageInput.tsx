@@ -96,6 +96,7 @@ const MessageInput = ({ onSubmit }) => {
             e.preventDefault()
           }
         }}
+        autoFocus
       />
       <button
         id="send-button"

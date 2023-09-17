@@ -37,7 +37,7 @@ const ProfilePicture = ({ avatar, setAvatar, username, userId }: ProfilePictureP
 
     return (
         <label
-            className="flex items-center relative"
+            className="flex items-center relative w-fit"
             htmlFor="avatar-input"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
@@ -47,13 +47,11 @@ const ProfilePicture = ({ avatar, setAvatar, username, userId }: ProfilePictureP
                 alt={avatar || `https://www.gravatar.com/avatar/${username}?d=identicon`}
                 height={32}
                 width={32}
-                className="w-8 h-8 rounded-full cursor-pointer"
+                className="w-8 h-8 rounded-full cursor-pointer aspect-square"
             />
-            {isHovering && (
-                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 rounded-full cursor-pointer">
+            <div className={`${isHovering ? 'block' : 'block md:hidden'} absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 rounded-full cursor-pointer`}>
                     <FaUpload size={16} className="text-white" />
                 </div>
-            )}
             <input type="file" id="avatar-input" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
         </label>
     );
