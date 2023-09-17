@@ -2,7 +2,7 @@ import Layout from '~/components/Layout'
 import Message from '~/components/Message'
 import MessageInput from '~/components/MessageInput'
 import { useRouter } from 'next/router'
-import { useStore, addMessage } from '~/lib/Store'
+import { useStore, addMessage, fetchUser } from '~/lib/Store'
 import { useContext, useEffect, useRef, useState } from 'react'
 import UserContext from '~/lib/UserContext'
 
@@ -11,6 +11,9 @@ const ChannelsPage = () => {
   const { user, authLoaded } = useContext(UserContext);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
+  const [username, setUsername] = useState(null)
+  const [avatar, setAvatar] = useState(null)
+  const [userId, setUserId] = useState(null)
 
   const channelId = router.query.id as string;
   const { messages, channels } = useStore({ channelId });
@@ -32,16 +35,29 @@ const ChannelsPage = () => {
   }, [channels, channelId]);
 
   useEffect(() => {
-    if (!user && authLoaded) {
+    if (!authLoaded) return;
+    if (!user) {
       router.push('/auth');
     }
+    fetchUser(user.id, (data) => {
+      console.log(data)
+      setUsername(data.username)
+      setAvatar(data.avatar)
+      setUserId(data.id)
+
+      if (user.email === data.username) {
+        const newUsername = prompt('Please enter your username');
+        setUsername(newUsername);
+      }
+
+    })
   }, [user, authLoaded]);
 
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative h-[var(--vvh)]">
         <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-16">
-          <div className="p-2 pl-1 overflow-y-auto">
+          <div className="p-2 pl-1 overflow-y-auto w-full break-all">
             {messages.map((message) => (
               <Message key={message.id} message={message} />
             ))}

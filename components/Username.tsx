@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { supabase } from '~/lib/Store';
 import { toast } from 'react-toastify';
-import UserContext from '~/lib/UserContext';
 
 interface UsernameProps {
     username: string;
