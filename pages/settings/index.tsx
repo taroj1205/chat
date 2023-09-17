@@ -5,10 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
 
-const SUPABASE_PROJECT_URL = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const STORAGE_BUCKET = 'avatar';
-
 const SettingsPage = () => {
     const { user, setUser, authLoaded } = useContext(UserContext);
     const [username, setUsername] = useState(user?.user_metadata?.username || '');

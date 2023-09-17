@@ -13,6 +13,7 @@ const MessageInput = ({ onSubmit }) => {
         mobileMediaQuery.matches ||
         typeof window.orientation !== 'undefined';
       setIsMobile(isMobileDevice);
+      setVisualViewport();
     };
 
     const setVisualViewport = () => {
