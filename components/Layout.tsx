@@ -5,7 +5,6 @@ import { addChannel, deleteChannel, fetchUser } from '~/lib/Store'
 import TrashIcon from '~/components/TrashIcon'
 import { useRouter } from 'next/router'
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa'
-import Image from 'next/image'
 import ProfilePicture from './ProfilePicture'
 import Username from './Username'
 
@@ -14,8 +13,8 @@ export default function Layout(props) {
   const router = useRouter()
   const [username, setUsername] = useState(null)
   const [avatar, setAvatar] = useState(null)
-  const [sidebarStyle, setSidebarStyle] = useState('hidden')
   const [userId, setUserId] = useState(null)
+  const [sidebarStyle, setSidebarStyle] = useState('hidden')
 
   useEffect(() => {
     if (!user) return

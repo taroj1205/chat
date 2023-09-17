@@ -6,7 +6,7 @@ const MessageInput = ({ onSubmit }) => {
   const inputRef = useRef<HTMLTextAreaElement>()
 
   const submitOnEnter = () => {
-    if (messageText.trim().length === 0) {
+    if (messageText.trim().length === 0 || messageText.trim().length > 1000) {
       inputRef.current.classList.add('shake-animation')
       inputRef.current.focus()
       setTimeout(() => {
