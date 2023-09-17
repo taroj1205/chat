@@ -11,7 +11,7 @@ interface UsernameProps {
 
 const Username = ({ username, userId, setUsername }: UsernameProps) => {
     // const { setUser } = useContext(UserContext);
-    const [initialUsername] = useState(username);
+    const [initialUsername, setInitialUsername] = useState(username);
 
     const handleSave = async () => {
         try {
@@ -23,6 +23,7 @@ const Username = ({ username, userId, setUsername }: UsernameProps) => {
                 console.log('Updated successfully!');
                 toast.success('Updated successfully!');
                 setUsername(username);
+                setInitialUsername(username);
             }
         } catch (error) {
             console.error('An error occurred:', error);
