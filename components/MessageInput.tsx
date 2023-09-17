@@ -13,7 +13,6 @@ const MessageInput = ({ onSubmit }) => {
         mobileMediaQuery.matches ||
         typeof window.orientation !== 'undefined';
       setIsMobile(isMobileDevice);
-      setVisualViewport();
     };
 
     const setVisualViewport = () => {
@@ -28,15 +27,14 @@ const MessageInput = ({ onSubmit }) => {
           '--vvh',
           `${window.innerHeight}px`
         );
-        checkIfMobile();
       }
+      checkIfMobile();
     };
+
     setVisualViewport();
 
-    checkIfMobile();
-
     return () => {
-      window.removeEventListener('resize', checkIfMobile);
+      window.removeEventListener('resize', setVisualViewport);
       if (document.documentElement) {
         document.documentElement.removeEventListener(
           'resize',
