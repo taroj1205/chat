@@ -10,29 +10,33 @@ const Message = ({ message }) => {
   const { user, userRoles } = useContext(UserContext)
   const [isOpen, setOpen] = useState(false)
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 })
+  const [isTimeHovered, setTimeHovered] = useState(false);
 
   const formatSentOn = (sent_on: string) => {
-    const now = new Date()
-    const messageDate = new Date(sent_on)
+    const now = new Date();
+    const messageDate = new Date(sent_on);
 
     const options: Intl.DateTimeFormatOptions = {
       hour: 'numeric',
       minute: 'numeric',
-      second: 'numeric',
       hour12: false,
+    };
+
+    if (isTimeHovered) {
+      options.second = 'numeric';
     }
 
     if (now.toDateString() === messageDate.toDateString()) {
-      return `Today at ${messageDate.toLocaleString(navigator.language, options)}`
+      return `Today at ${messageDate.toLocaleString(navigator.language, options)}`;
     } else if (now.getDate() - messageDate.getDate() === 1) {
-      return `Yesterday at ${messageDate.toLocaleString(navigator.language, options)}`
+      return `Yesterday at ${messageDate.toLocaleString(navigator.language, options)}`;
     } else {
-      const day = messageDate.getDate().toString().padStart(2, '0')
-      const month = (messageDate.getMonth() + 1).toString().padStart(2, '0')
-      const year = messageDate.getFullYear().toString().substr(-2)
-      return `${day}/${month}/${year} ${messageDate.toLocaleString(navigator.language, options)}`
+      const day = messageDate.getDate().toString().padStart(2, '0');
+      const month = (messageDate.getMonth() + 1).toString().padStart(2, '0');
+      const year = messageDate.getFullYear().toString().substr(-2);
+      return `${day}/${month}/${year} ${messageDate.toLocaleString(navigator.language, options)}`;
     }
-  }
+  };
 
   const copyMessage = () => {
     if (!message) return
@@ -43,7 +47,7 @@ const Message = ({ message }) => {
 
   return (
     <div
-      className="py-1 flex items-center space-x-2"
+      className="py-1 flex items-center space-x-2 hover:bg-gray-300 dark:hover:bg-gray-900"
       onContextMenu={(e) => {
         if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
 
@@ -81,7 +85,11 @@ const Message = ({ message }) => {
               {message.author.username}
             </span>
             <span className="ml-1 text-xs text-gray-500">
-              <span className="ml-1 text-xs text-gray-500">
+              <span
+                className="ml-1 text-xs text-gray-500"
+                onMouseEnter={() => setTimeHovered(true)}
+                onMouseLeave={() => setTimeHovered(false)}
+              >
                 {formatSentOn(message.inserted_at)}
               </span>
             </span>
