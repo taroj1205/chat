@@ -296,9 +296,12 @@ export const deleteMessage = async (message_id) => {
  */
 export const editMessage = async (message_id, new_message) => {
   try {
+    let newMessage = prompt('Enter a new message:', new_message)
 
-    const newMessage = prompt('Enter a new message:', new_message)
-    if (newMessage === null || newMessage === new_message || newMessage.trim().length === 0) return
+    while (newMessage.length > 1000 || newMessage === null || newMessage === new_message || newMessage.trim().length === 0) {
+      alert('Message must be between 1 and 1000 characters long.')
+      newMessage = prompt('Enter a new message:', newMessage)
+    }
 
     let { data } = await supabase
       .from('messages')
