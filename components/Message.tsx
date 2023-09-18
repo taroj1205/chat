@@ -69,7 +69,9 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
       >
         {(user?.id === message.user_id ||
           userRoles.some((role) => ['admin', 'moderator'].includes(role))) && (
-            <MenuItem onClick={() => deleteMessage(message.id)}>
+          <MenuItem onClick={() => {
+            deleteMessage(message.id)
+          }}>
               <FaTrash /><span className='ml-2'>Delete</span>
             </MenuItem>
           )}
@@ -82,7 +84,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
           </MenuItem>
         )}
         <MenuItem onClick={() => replyMessage(message)}>
-          <FaReply /><span className='ml-2'>Reply</span>
+          <FaReply className='scale-x-[-1]' /><span className='ml-2'>Reply</span>
         </MenuItem>
       </ControlledMenu>
       <div className='flex flex-col w-full' id={message.id}>

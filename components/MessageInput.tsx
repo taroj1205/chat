@@ -53,7 +53,7 @@ const MessageInput = ({ onSubmit, replyingTo, setReplyingTo }) => {
             {isHovering ? (
               <FaTimes className="text-gray-500 dark:text-gray-400" />
             ) : (
-              <FaReply className="text-gray-500 dark:text-gray-400" />
+              <FaReply className="text-gray-500 dark:text-gray-400 scale-x-[-1]" />
             )}
           </div>
           <div className="flex-shrink-0">

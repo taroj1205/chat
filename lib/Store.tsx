@@ -300,10 +300,13 @@ export const deleteMessage = async (message_id) => {
   try {
     const confirmDelete = window.confirm('Are you sure you want to delete this message?')
     if (!confirmDelete) return
-    let { data } = await supabase
+    console.log(message_id)
+    let { data, error } = await supabase
       .from('messages')
       .update({ deleted_at: new Date().toISOString() })
       .match({ id: message_id })
+    if (error) throw error
+    console.log(data)
     return data
   } catch (error) {
     console.log('error', error)
