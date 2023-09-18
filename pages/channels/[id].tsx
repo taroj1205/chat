@@ -70,7 +70,7 @@ const ChannelsPage = () => {
         <div className="p-2 fixed md:absolute bottom-0 left-0 w-full">
           <MessageInput replyingTo={replyingTo} setReplyingTo={setReplyingTo} onSubmit={async (text) => {
             if (text.trim().length === 0) return;
-            addMessage(text, channelId, user.id, replyingTo);
+            await addMessage(text, channelId, user.id, replyingTo.id);
             setReplyingTo(null);
           }} />
         </div>

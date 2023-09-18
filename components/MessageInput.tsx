@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { FaPaperPlane, FaReply, FaTimes } from 'react-icons/fa'
 
 const MessageInput = ({ onSubmit, replyingTo, setReplyingTo }) => {
@@ -35,6 +35,10 @@ const MessageInput = ({ onSubmit, replyingTo, setReplyingTo }) => {
 
     target.rows = rows;
   }
+
+  useEffect(() => {
+    if (replyingTo) { inputRef.current.focus() }
+  }, [replyingTo])
 
   return (
     <div className='flex flex-grow flex-col'>

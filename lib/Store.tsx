@@ -269,7 +269,8 @@ export const addChannel = async (slug, user_id) => {
 export const addMessage = async (message, channel_id, user_id, replying_to) => {
   try {
     console.log(replying_to);
-    let { data } = await supabase.from('messages').insert([{ message, channel_id, user_id, replying_to }]).select()
+    let { data, error } = await supabase.from('messages').insert([{ message, channel_id, user_id, replying_to }]).select()
+    if (error) throw error
     return data
   } catch (error) {
     console.log('error', error)

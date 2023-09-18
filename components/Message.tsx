@@ -52,7 +52,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
 
   return (
     <div
-      className={`flex items-center rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-opacity-20 dark:bg-opacity-20 rounded-b-lg' : 'hover:bg-gray-300 dark:hover:bg-gray-950 py-1 space-x-2'}`}
+      className={`flex items-center rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-opacity-20 dark:bg-opacity-20 rounded-b-lg' : `${isOpen ? 'bg-gray-300 dark:bg-gray-950' : 'hover:bg-gray-300 dark:hover:bg-gray-950'} py-1 space-x-2`}`}
       onContextMenu={(e) => {
         if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
 
@@ -108,7 +108,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
             </div>
           </Link>
         )}
-        <div className={`flex flex-row ${message.author.username === replyingToMessage?.author.username ? 'ml-2' : ''}`}>
+        <div className={`flex flex-row ${message.author.username === replyingToMessage?.author.username ? 'ml-2 mb-1' : ''}`}>
           <div className='flex flex-row mt-1'>
             <Image src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`} alt={message.author.username} height={50} width={50} className="w-10 h-10 mr-2 rounded-full aspect-square object-cover" />
             <div>
