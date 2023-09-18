@@ -64,7 +64,7 @@ const ChannelsPage = () => {
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative h-[var(--vvh)] bg-gray-200 dark:bg-gray-900">
-        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-16">
+        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-10">
           <div className="p-2 pl-1 overflow-y-auto w-full break-words">
             {messages.map((message) => {
               const replyingToMessage = messages.find((m) => m.id === message.replying_to);
