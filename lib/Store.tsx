@@ -21,6 +21,7 @@ export const useStore = (props) => {
   useEffect(() => {
     // Get Channels
     fetchChannels(setChannels)
+
     // Listen for new and deleted messages
     const messageListener = supabase
       .channel('public:messages')
@@ -82,8 +83,9 @@ export const useStore = (props) => {
             handleDeletedChannel(updatedChannel); // Delete the message from the state
           }
         }
-      )
+    )
       .subscribe()
+          
     // Cleanup on unmount
     return () => {
       supabase.removeChannel(messageListener)

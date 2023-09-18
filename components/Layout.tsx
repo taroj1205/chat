@@ -19,14 +19,11 @@ export default function Layout(props) {
   useEffect(() => {
     if (!user) return
     fetchUser(user.id, (data) => {
-      console.log(data)
       setUsername(data.username)
       setAvatar(data.avatar)
       setUserId(data.id)
     })
   }, [user])
-
-  console.log(user);
 
   const slugify = (text) => {
     return text

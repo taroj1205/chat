@@ -6,12 +6,14 @@ import '@szhsin/react-menu/dist/index.css'
 import { FaCopy, FaEdit, FaReply, FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
+import AuthorProfile from './AuthorProfile';
 
 const Message = ({ message, setReplyingTo, replyingToMessage }) => {
   const { user, userRoles } = useContext(UserContext)
   const [isOpen, setOpen] = useState(false)
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 })
   const [isTimeHovered, setTimeHovered] = useState(false);
+  const [authorProfilePopup, setAuthorProfilePopup] = useState(false);
 
   const formatSentOn = (sent_on: string) => {
     const now = new Date();
@@ -112,7 +114,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
         )}
         <div className={`flex flex-row ${message.author.username === replyingToMessage?.author.username ? 'ml-2 mb-1' : ''}`}>
           <div className='flex flex-row mt-1'>
-            <Image src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`} alt={message.author.username} height={50} width={50} className="w-10 h-10 mr-2 rounded-full aspect-square object-cover" />
+            <AuthorProfile message={message} authorProfilePopup={authorProfilePopup} setAuthorProfilePopup={setAuthorProfilePopup}  />
             <div>
               <div className="flex items-center">
                 <span className="text-sm font-semibold">
@@ -124,7 +126,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
                     onMouseEnter={() => setTimeHovered(true)}
                     onMouseLeave={() => setTimeHovered(false)}
                   >
-                    {formatSentOn(message.inserted_at)}
+                    <time dateTime={message.author.inserted_at}>{formatSentOn(message.inserted_at)}</time>
                   </span>
                 </span>
               </div>
@@ -133,6 +135,9 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
           </div>
         </div>
       </div>
+      {authorProfilePopup && (
+        <div className='absolute top-0 left-0 inset-0 z-10' onClick={() => setAuthorProfilePopup(false)}></div>
+      )}
     </div>
   )
 }
