@@ -33,7 +33,9 @@ const Username = ({ username, userId, setUsername }: UsernameProps) => {
 
         try {
             const { error } = await supabase.from('users').update({ username: newUsername }).eq('id', userId);
-            if (error) {
+            if (newUsername.length > 32) {
+                alert('Username must be 32 characters or less');
+            } else if (error) {
                 console.error(error);
                 if (error.message.includes('violates unique constraint')) {
                     alert('Username already exists');
