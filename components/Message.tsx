@@ -52,7 +52,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
 
   return (
     <div
-      className={`flex items-center rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 bg-opacity-20 rounded-b-lg' : 'hover:bg-gray-300 dark:hover:bg-gray-950 py-1 space-x-2'}`}
+      className={`flex items-center rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-opacity-20 dark:bg-opacity-20 rounded-b-lg' : 'hover:bg-gray-300 dark:hover:bg-gray-950 py-1 space-x-2'}`}
       onContextMenu={(e) => {
         if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
 
