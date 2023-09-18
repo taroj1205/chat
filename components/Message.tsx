@@ -41,8 +41,7 @@ const Message = ({ message }) => {
   const copyMessage = () => {
     if (!message) return
 
-    const text = `${message.author.username} (${formatSentOn(message.inserted_at)}):\n${message.message}`
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(message.message)
   }
 
   return (
