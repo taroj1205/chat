@@ -14,6 +14,7 @@ const ChannelsPage = () => {
   const [username, setUsername] = useState(null)
   const [avatar, setAvatar] = useState(null)
   const [userId, setUserId] = useState(null)
+  const [replyingTo, setReplyingTo] = useState(null)
 
   const channelId = router.query.id as string;
   const { messages, channels } = useStore({ channelId });
@@ -56,18 +57,21 @@ const ChannelsPage = () => {
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative h-[var(--vvh)]">
-        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-16">
+        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-16  bg-gray-200 dark:bg-gray-900">
           <div className="p-2 pl-1 overflow-y-auto w-full break-all">
-            {messages.map((message) => (
-              <Message key={message.id} message={message} />
-            ))}
+            {messages.map((message) => {
+              const replyingToMessage = messages.find((m) => m.id === message.replying_to);
+              console.log(replyingToMessage);
+                return <Message key={message.id} message={message} setReplyingTo={setReplyingTo} replyingToMessage={replyingToMessage} />;
+            })}
             <div ref={messagesEndRef} style={{ height: 0 }} />
           </div>
         </div>
         <div className="p-2 fixed md:absolute bottom-0 left-0 w-full">
-          <MessageInput onSubmit={async (text) => {
+          <MessageInput replyingTo={replyingTo} setReplyingTo={setReplyingTo} onSubmit={async (text) => {
             if (text.trim().length === 0) return;
-            addMessage(text, channelId, user.id);
+            addMessage(text, channelId, user.id, replyingTo);
+            setReplyingTo(null);
           }} />
         </div>
       </div>

@@ -1,12 +1,13 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import UserContext from '~/lib/UserContext'
-import { deleteMessage, editMessage } from '~/lib/Store'
+import { fetchUser, deleteMessage, editMessage } from '~/lib/Store'
 import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css'
-import { FaCopy, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaCopy, FaEdit, FaReply, FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
+import Link from 'next/link';
 
-const Message = ({ message }) => {
+const Message = ({ message, setReplyingTo, replyingToMessage }) => {
   const { user, userRoles } = useContext(UserContext)
   const [isOpen, setOpen] = useState(false)
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 })
@@ -44,9 +45,14 @@ const Message = ({ message }) => {
     navigator.clipboard.writeText(message.message)
   }
 
+  const replyMessage = (message) => {
+    console.log(message)
+    setReplyingTo(message)
+  }
+
   return (
     <div
-      className="py-1 flex items-center space-x-2 hover:bg-gray-300 dark:hover:bg-gray-900"
+      className={`flex items-center rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 bg-opacity-20 rounded-b-lg' : 'hover:bg-gray-300 dark:hover:bg-gray-950 py-1 space-x-2'}`}
       onContextMenu={(e) => {
         if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
 
@@ -75,25 +81,54 @@ const Message = ({ message }) => {
             <FaEdit /><span className='ml-2'>Edit</span>
           </MenuItem>
         )}
+        <MenuItem onClick={() => replyMessage(message)}>
+          <FaReply /><span className='ml-2'>Reply</span>
+        </MenuItem>
       </ControlledMenu>
-      <div className='flex flex-row'>
-        <Image src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`} alt={message.author.username} height={50} width={50} className="w-10 h-10 mr-2 rounded-full aspect-square object-cover" />
-        <div>
-          <div className="flex items-center">
-            <span className="text-sm font-semibold">
-              {message.author.username}
-            </span>
-            <span className="ml-1 text-xs text-gray-500">
-              <span
-                className="ml-1 text-xs text-gray-500"
-                onMouseEnter={() => setTimeHovered(true)}
-                onMouseLeave={() => setTimeHovered(false)}
+      <div className='flex flex-col w-full' id={message.id}>
+        {replyingToMessage && (
+          <Link href={`/channels/${replyingToMessage.channel_id}#${replyingToMessage.id}`} className="rounded-tl-lg rounded-tr-lg text-gray-700 dark:text-gray-300 px-4 py-1 w-full flex items-center">
+            <div className='flex flex-row space-x-2 opacity-60 hover:opacity-100'>
+              <div
+                className="flex-shrink-0 scale-x-[-1] ml-2"
               >
-                {formatSentOn(message.inserted_at)}
-              </span>
-            </span>
+                <FaReply className="text-gray-500 dark:text-gray-400" />
+              </div>
+              <div className="flex-shrink-0 flex flex-row space-x-1">
+                <Image
+                  src={replyingToMessage.author.avatar || `https://www.gravatar.com/avatar/${replyingToMessage.author.username}?d=identicon`}
+                  alt={replyingToMessage.author.username}
+                  width={50}
+                  height={50}
+                  className="w-5 h-5 rounded-full aspect-square object-cover"
+                />
+                <div className="text-sm font-semibold">{replyingToMessage.author.username}</div>
+                <div className="text-sm">{replyingToMessage.message}</div>
+              </div>
+            </div>
+          </Link>
+        )}
+        <div className={`flex flex-row ${message.author.username === replyingToMessage?.author.username ? 'ml-2' : ''}`}>
+          <div className='flex flex-row mt-1'>
+            <Image src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`} alt={message.author.username} height={50} width={50} className="w-10 h-10 mr-2 rounded-full aspect-square object-cover" />
+            <div>
+              <div className="flex items-center">
+                <span className="text-sm font-semibold">
+                  {message.author.username}
+                </span>
+                <span className="ml-1 text-xs text-gray-500">
+                  <span
+                    className="ml-1 text-xs text-gray-500"
+                    onMouseEnter={() => setTimeHovered(true)}
+                    onMouseLeave={() => setTimeHovered(false)}
+                  >
+                    {formatSentOn(message.inserted_at)}
+                  </span>
+                </span>
+              </div>
+              <p className="text-black dark:text-white break-words">{message.message}</p>
+            </div>
           </div>
-          <p className="text-black dark:text-white break-words">{message.message}</p>
         </div>
       </div>
     </div>

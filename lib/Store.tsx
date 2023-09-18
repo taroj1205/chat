@@ -151,9 +151,28 @@ export const useStore = (props) => {
 
   // New or updated user received from Postgres
   useEffect(() => {
-    if (newOrUpdatedUser) users.set(newOrUpdatedUser.id, newOrUpdatedUser)
+    if (newOrUpdatedUser) {
+      users.set(newOrUpdatedUser.id, newOrUpdatedUser);
+
+      // Update the username in messages
+      const updatedMessages = messages.map((message) => {
+        if (message.user_id === newOrUpdatedUser.id) {
+          return {
+            ...message,
+            author: {
+              ...message.author,
+              username: newOrUpdatedUser.username,
+            },
+          };
+        } else {
+          return message;
+        }
+      });
+
+      setMessages(updatedMessages);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newOrUpdatedUser])
+  }, [newOrUpdatedUser]);
 
   return {
     // We can export computed values here to map the authors to each message
@@ -247,9 +266,10 @@ export const addChannel = async (slug, user_id) => {
  * @param {number} channel_id
  * @param {number} user_id The author
  */
-export const addMessage = async (message, channel_id, user_id) => {
+export const addMessage = async (message, channel_id, user_id, replying_to) => {
   try {
-    let { data } = await supabase.from('messages').insert([{ message, channel_id, user_id }]).select()
+    console.log(replying_to);
+    let { data } = await supabase.from('messages').insert([{ message, channel_id, user_id, replying_to }]).select()
     return data
   } catch (error) {
     console.log('error', error)
