@@ -44,8 +44,8 @@ const AuthorProfile = ({ message, authorProfilePopup, setAuthorProfilePopup }) =
                 />
                 {authorProfilePopup && (
                     <div className="relative">
-                        <div className="absolute left-0 bottom-0 ml-12 z-20">
-                            <div className="bg-white dark:bg-gray-900 p-4 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg w-72">
+                        <div className="absolute left-0 bottom-1 ml-12 z-20">
+                            <div className="bg-white dark:bg-gray-900 p-4 border border-gray-300 dark:border-gray-700 rounded-t-2xl rounded-br-2xl rounded-bl-sm shadow-lg w-72">
                                 <div className="flex items-center">
                                     <Image
                                         src={message.author.avatar || `https://www.gravatar.com/avatar/${message.author.username}?d=identicon`}

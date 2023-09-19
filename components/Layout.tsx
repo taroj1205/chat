@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa'
 import ProfilePicture from './ProfilePicture'
 import Username from './Username'
+import { ThemeSwitcher } from './ThemeSwitcher'
 
 export default function Layout(props) {
   const { signOut, user, userRoles } = useContext(UserContext)
