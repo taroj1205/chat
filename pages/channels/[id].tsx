@@ -43,20 +43,10 @@ const ChannelsPage = () => {
       router.push('/auth');
     }
     fetchUser(user.id, async (data) => {
-      console.log(data)
+      console.log("User data:", data)
       setUsername(data.username)
       setAvatar(data.avatar)
       setUserId(data.id)
-
-      if (user.email === data.username) {
-        let newUsername = prompt('Please enter your username');
-        while (newUsername.length > 32) {
-          newUsername = prompt('Username must be 32 characters or less. Please enter a new username:');
-        }
-        const { error } = await supabase.from('users').update({ username: newUsername }).eq('id', userId);
-        if (error) alert(error.message);
-        setUsername(newUsername);
-      }
 
     })
   }, [user, authLoaded]);
@@ -69,7 +59,7 @@ const ChannelsPage = () => {
             {messages.map((message) => {
               const replyingToMessage = messages.find((m) => m.id === message.replying_to);
               console.log(replyingToMessage);
-              return <Message key={message.id} username={username} message={message} setReplyingTo={setReplyingTo} replyingToMessage={replyingToMessage} />;
+              return <Message key={message.id} message={message} setReplyingTo={setReplyingTo} replyingToMessage={replyingToMessage} />;
             })}
             <div ref={messagesEndRef} style={{ height: 0 }} />
           </div>
@@ -77,8 +67,11 @@ const ChannelsPage = () => {
         <div className="absolute bottom-0 left-0 w-full">
           <MessageInput replyingTo={replyingTo} setReplyingTo={setReplyingTo} onSubmit={async (text) => {
             if (text.trim().length === 0) return;
-            await addMessage(text, channelId, user.id, replyingTo.id);
-            setReplyingTo(null);
+            if (replyingTo) {
+              await addMessage(text, channelId, user.id, replyingTo.id);
+              setReplyingTo(null);
+            }
+            await addMessage(text, channelId, user.id, null);
           }} />
         </div>
       </div>

@@ -8,12 +8,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AuthorProfile from './AuthorProfile';
 
-const Message = ({ message, username, setReplyingTo, replyingToMessage }) => {
+const Message = ({ message, setReplyingTo, replyingToMessage }) => {
   const { user, userRoles } = useContext(UserContext)
   const [isOpen, setOpen] = useState(false)
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 })
   const [isTimeHovered, setTimeHovered] = useState(false);
   const [authorProfilePopup, setAuthorProfilePopup] = useState(false);
+  const [username, setUsername] = useState(null)
 
   const formatSentOn = (sent_on: string) => {
     const now = new Date();
@@ -54,7 +55,7 @@ const Message = ({ message, username, setReplyingTo, replyingToMessage }) => {
 
   return (
     <div
-      className={`flex items-center ${message.author.username === username ? 'rounded-t-lg rounded-br-lg rounded-bl-sm' : 'rounded-t-lg rounded-bl-lg rounded-br-sm'} rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-opacity-20 dark:bg-opacity-20 rounded-b-lg' : `${isOpen ? 'bg-gray-300 dark:bg-gray-950' : 'hover:bg-gray-300 dark:hover:bg-gray-950'} py-1 space-x-2 transition-colors duration-500`}`}
+      className={`flex items-center ${message.author.username === (document.getElementById('username') as HTMLInputElement)?.value ? 'rounded-t-2xl rounded-bl-2xl rounded-br-sm' : 'rounded-t-2xl rounded-br-2xl rounded-bl-sm'} rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-opacity-20 dark:bg-opacity-20 rounded-b-lg' : `${isOpen ? 'bg-gray-300 dark:bg-gray-950' : 'hover:bg-gray-300 dark:hover:bg-gray-950'} py-1 space-x-2 transition-colors duration-400`}`}
       onContextMenu={(e) => {
         if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
 
