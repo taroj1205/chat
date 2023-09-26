@@ -43,29 +43,18 @@ const ChannelsPage = () => {
       router.push('/auth');
     }
     fetchUser(user.id, async (data) => {
-      console.log(data)
+      console.log("User data:", data)
       setUsername(data.username)
       setAvatar(data.avatar)
       setUserId(data.id)
-
-      if (user.email === data.username) {
-        let newUsername = prompt('Please enter your username');
-        while (newUsername.length > 32) {
-          newUsername = prompt('Username must be 32 characters or less. Please enter a new username:');
-        }
-        const { error } = await supabase.from('users').update({ username: newUsername }).eq('id', userId);
-        if (error) alert(error.message);
-        setUsername(newUsername);
-      }
-
     })
   }, [user, authLoaded]);
 
   return (
     <Layout channels={channels} activeChannelId={channelId} expanded={expanded} setExpanded={setExpanded}>
       <div className="relative h-[var(--vvh)] bg-gray-200 dark:bg-gray-900">
-        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full pb-10">
-          <div className="p-2 pl-1 overflow-y-auto w-full break-words">
+        <div className="Messages h-[var(--vvh)] w-[var(--vvw)] md:w-full">
+          <div className="p-2 pl-1 overflow-y-auto w-full break-words pb-20 pt-8">
             {messages.map((message) => {
               const replyingToMessage = messages.find((m) => m.id === message.replying_to);
               console.log(replyingToMessage);
@@ -77,8 +66,11 @@ const ChannelsPage = () => {
         <div className="absolute bottom-0 left-0 w-full">
           <MessageInput replyingTo={replyingTo} setReplyingTo={setReplyingTo} onSubmit={async (text) => {
             if (text.trim().length === 0) return;
-            await addMessage(text, channelId, user.id, replyingTo.id);
-            setReplyingTo(null);
+            if (replyingTo) {
+              await addMessage(text, channelId, user.id, replyingTo.id);
+              setReplyingTo(null);
+            }
+            await addMessage(text, channelId, user.id, null);
           }} />
         </div>
       </div>

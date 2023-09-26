@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import UserContext from '~/lib/UserContext'
-import { addChannel, deleteChannel, fetchUser } from '~/lib/Store'
+import { addChannel, deleteChannel, fetchUser, supabase } from '~/lib/Store'
 import TrashIcon from '~/components/TrashIcon'
 import { useRouter } from 'next/router'
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa'
@@ -18,10 +18,20 @@ export default function Layout(props) {
 
   useEffect(() => {
     if (!user) return
-    fetchUser(user.id, (data) => {
+    fetchUser(user.id, async (data) => {
       setUsername(data.username)
       setAvatar(data.avatar)
       setUserId(data.id)
+
+      if (user.email === data.username) {
+        let newUsername = prompt('Please enter your username');
+        while (newUsername.length > 32) {
+          newUsername = prompt('Username must be 32 characters or less. Please enter a new username:');
+        }
+        const { error } = await supabase.from('users').update({ username: newUsername }).eq('id', userId);
+        if (error) alert(error.message);
+        setUsername(newUsername);
+      }
     })
   }, [user])
 

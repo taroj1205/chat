@@ -14,6 +14,8 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 })
   const [isTimeHovered, setTimeHovered] = useState(false);
   const [authorProfilePopup, setAuthorProfilePopup] = useState(false);
+  const [username, setUsername] = useState(null)
+  const usernameRef = useRef<HTMLDivElement>(null)
 
   const formatSentOn = (sent_on: string) => {
     const now = new Date();
@@ -54,7 +56,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
 
   return (
     <div
-      className={`flex items-center rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-opacity-20 dark:bg-opacity-20 rounded-b-lg' : `${isOpen ? 'bg-gray-300 dark:bg-gray-950' : 'hover:bg-gray-300 dark:hover:bg-gray-950'} py-1 space-x-2`}`}
+      className={`flex items-center ${message.author.username === (document.getElementById('username') as HTMLInputElement)?.value ? 'rounded-t-2xl rounded-bl-2xl rounded-br-sm' : 'rounded-t-2xl rounded-br-2xl rounded-bl-sm'} rounded-lg ${message.author.username === replyingToMessage?.author.username ? 'bg-yellow-500 dark:bg-yellow-800 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-opacity-20 dark:bg-opacity-20 rounded-b-lg' : `${isOpen ? 'bg-gray-300 dark:bg-gray-950' : 'hover:bg-gray-300 dark:hover:bg-gray-950'} py-1 space-x-2 transition-colors duration-400`}`}
       onContextMenu={(e) => {
         if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
 
@@ -114,15 +116,19 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
         )}
         <div className={`flex flex-row ${message.author.username === replyingToMessage?.author.username ? 'ml-2 mb-1' : ''}`}>
           <div className='flex flex-row mt-1'>
-            <AuthorProfile message={message} authorProfilePopup={authorProfilePopup} setAuthorProfilePopup={setAuthorProfilePopup}  />
+            <AuthorProfile message={message} authorProfilePopup={authorProfilePopup} setAuthorProfilePopup={setAuthorProfilePopup} usernameRef={usernameRef}  />
             <div>
               <div className="flex items-center">
-                <span className="text-sm font-semibold">
+                <span className="text-sm font-semibold hover:underline cursor-pointer" onClick={() => {
+                  setAuthorProfilePopup(true)
+                }}
+                ref={usernameRef}
+                >
                   {message.author.username}
                 </span>
                 <span className="ml-1 text-xs text-gray-500">
                   <span
-                    className="ml-1 text-xs text-gray-500"
+                    className="ml-1 text-xs text-gray-500 cursor-default"
                     onMouseEnter={() => setTimeHovered(true)}
                     onMouseLeave={() => setTimeHovered(false)}
                   >
@@ -135,9 +141,6 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
           </div>
         </div>
       </div>
-      {authorProfilePopup && (
-        <div className='absolute top-0 left-0 inset-0 z-10' onClick={() => setAuthorProfilePopup(false)}></div>
-      )}
     </div>
   )
 }

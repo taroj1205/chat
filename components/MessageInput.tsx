@@ -1,3 +1,4 @@
+import { minimal } from '@supabase/auth-ui-shared'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
@@ -18,7 +19,11 @@ const MessageInput = ({ onSubmit, replyingTo, setReplyingTo }) => {
         );
       }, 500);
     } else {
-      onSubmit(messageText, replyingTo.id)
+      if (replyingTo) {
+        onSubmit(messageText, replyingTo.id)
+      } else {
+        onSubmit(messageText, null)
+      }
       setMessageText('')
       inputRef.current.value = ''
       inputRef.current.focus()
