@@ -47,7 +47,6 @@ const ChannelsPage = () => {
       setUsername(data.username)
       setAvatar(data.avatar)
       setUserId(data.id)
-
     })
   }, [user, authLoaded]);
 

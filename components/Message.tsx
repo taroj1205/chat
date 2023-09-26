@@ -15,6 +15,7 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
   const [isTimeHovered, setTimeHovered] = useState(false);
   const [authorProfilePopup, setAuthorProfilePopup] = useState(false);
   const [username, setUsername] = useState(null)
+  const usernameRef = useRef<HTMLDivElement>(null)
 
   const formatSentOn = (sent_on: string) => {
     const now = new Date();
@@ -115,15 +116,19 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
         )}
         <div className={`flex flex-row ${message.author.username === replyingToMessage?.author.username ? 'ml-2 mb-1' : ''}`}>
           <div className='flex flex-row mt-1'>
-            <AuthorProfile message={message} authorProfilePopup={authorProfilePopup} setAuthorProfilePopup={setAuthorProfilePopup}  />
+            <AuthorProfile message={message} authorProfilePopup={authorProfilePopup} setAuthorProfilePopup={setAuthorProfilePopup} usernameRef={usernameRef}  />
             <div>
               <div className="flex items-center">
-                <span className="text-sm font-semibold">
+                <span className="text-sm font-semibold hover:underline cursor-pointer" onClick={() => {
+                  setAuthorProfilePopup(true)
+                }}
+                ref={usernameRef}
+                >
                   {message.author.username}
                 </span>
                 <span className="ml-1 text-xs text-gray-500">
                   <span
-                    className="ml-1 text-xs text-gray-500"
+                    className="ml-1 text-xs text-gray-500 cursor-default"
                     onMouseEnter={() => setTimeHovered(true)}
                     onMouseLeave={() => setTimeHovered(false)}
                   >
@@ -136,9 +141,6 @@ const Message = ({ message, setReplyingTo, replyingToMessage }) => {
           </div>
         </div>
       </div>
-      {authorProfilePopup && (
-        <div className='absolute top-0 left-0 inset-0 z-10' onClick={() => setAuthorProfilePopup(false)}></div>
-      )}
     </div>
   )
 }
