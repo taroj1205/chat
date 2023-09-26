@@ -57,22 +57,17 @@ const Username = ({ username, userId, setUsername }: UsernameProps) => {
         <div
             className="flex flex-row w-full text-sm"
             onContextMenu={(e) => {
+                console.log(e);
                 if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
-
                 e.preventDefault();
                 setAnchorPoint({ x: e.clientX, y: e.clientY });
                 setOpen(true);
             }}
-            onClick={handleSave}
         >
-            <input
-                type="text"
+            <div
                 id="username"
                 className="border-none text-black dark:text-white bg-inherit hover:bg-slate-700 hover:text-white cursor-pointer rounded w-full py-2 px-3"
-                value={username}
-                disabled
-                onChange={(e) => setUsername(e.target.value)}
-            />
+            >{username}</div>
             <ControlledMenu
                 anchorPoint={anchorPoint}
                 state={isOpen ? 'open' : 'closed'}
