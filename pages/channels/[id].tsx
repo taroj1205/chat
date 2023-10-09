@@ -21,7 +21,8 @@ const ChannelsPage = () => {
   const { messages, channels } = useStore({ channelId });
 
   useEffect(() => {
-    if (messagesEndRef.current) {
+    const messageId = router.asPath.split('#')[1];
+    if (messagesEndRef.current && !messageId) {
       messagesEndRef.current.scrollIntoView({
         block: 'start',
         behavior: 'smooth',
